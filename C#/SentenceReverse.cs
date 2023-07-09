@@ -12,7 +12,7 @@ class Solution
             return arr;
         }
 
-        var list = new List<string>();
+        var stack = new Stack<string>();
         var sb = new StringBuilder();
 
         foreach (var c in arr)
@@ -23,18 +23,30 @@ class Solution
             }
             else
             {
-                sb.Insert(0, c);
-                list.Add(sb.ToString());
-                sb = new StringBuilder();
+                if (sb.Length > 0)
+                {
+                    var str = sb.ToString();
+                    stack.Push(str);
+                    sb = new StringBuilder();
+                }
+                var cStr = c.ToString();
+                stack.Push(cStr);
             }
         }
 
-        list.Add(sb.ToString());
-        list.Reverse();
-        var res = string.Join("", list);
-        var finalRes = res.ToCharArray();
+        stack.Push(sb.ToString());
 
-        return finalRes;
+        var result = new char[arr.Length];
+        int i = 0;
+        while (stack.Count > 0)
+        {
+            foreach (var c in stack.Pop())
+            {
+                result[i++] = c;
+            }
+        }
+
+        return result;
     }
 
     private static void PrintResult(char[] results)
